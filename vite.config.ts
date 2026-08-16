@@ -47,10 +47,16 @@ export default defineConfig(({ mode }) => {
         output: {
           // Firebase is large and changes rarely — keeping it in its own chunk
           // means an app-code deploy does not invalidate it in the CDN cache.
-          manualChunks: {
-            firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
-            charts: ['chart.js', 'react-chartjs-2'],
-            graph: ['d3'],
+          manualChunks(id) {
+            if (id.includes('node_modules/firebase') || id.includes('node_modules/@firebase')) {
+              return 'firebase';
+            }
+            if (id.includes('node_modules/chart.js') || id.includes('node_modules/react-chartjs-2')) {
+              return 'charts';
+            }
+            if (id.includes('node_modules/d3')) {
+              return 'graph';
+            }
           },
         },
       },

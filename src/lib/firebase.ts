@@ -11,6 +11,7 @@ import {
   getFirestore,
   type Firestore,
 } from 'firebase/firestore';
+import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics';
 
 /**
  * Firebase initialization.
@@ -72,6 +73,7 @@ export const firebaseProjectId = options.projectId ?? 'unconfigured';
 let app: FirebaseApp | null = null;
 let authInstance: Auth | null = null;
 let dbInstance: Firestore | null = null;
+let analyticsInstance: Analytics | null = null;
 
 const useEmulators = import.meta.env.VITE_FIREBASE_USE_EMULATORS === '1';
 const emulatorHost = import.meta.env.VITE_FIREBASE_EMULATOR_HOST || '127.0.0.1';
@@ -83,7 +85,19 @@ function getApp(): FirebaseApp {
         'Copy .env.example to .env.local and fill in the values from the Firebase console.',
     );
   }
-  app ??= initializeApp(options);
+  if (!app) {
+    app = initializeApp(options);
+    // Initialize analytics if supported and in browser environment
+    if (typeof window !== 'undefined' && options.measurementId) {
+      void isSupported()
+        .then((supported) => {
+          if (supported && app && !analyticsInstance) {
+            analyticsInstance = getAnalytics(app);
+          }
+        })
+        .catch(() => {});
+    }
+  }
   return app;
 }
 
@@ -113,3 +127,20 @@ export function getDb(): Firestore {
   }
   return dbInstance;
 }
+
+export async function getFirebaseAnalytics(): Promise<Analytics | null> {
+  if (analyticsInstance) return analyticsInstance;
+  if (!isFirebaseConfigured() || typeof window === 'undefined' || !options.measurementId) {
+    return null;
+  }
+  try {
+    const supported = await isSupported();
+    if (supported) {
+      analyticsInstance = getAnalytics(getApp());
+    }
+  } catch {
+    // Analytics is optional; fail quietly if adblockers block it
+  }
+  return analyticsInstance;
+}
+
