@@ -1,24 +1,51 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+build/
+coverage/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local development
 *.local
 .DS_Store
+
+# Logs
+*.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-.env
-.env.local
-.env.*.local
-
+# Firebase local emulator / debug files
 .firebase/
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
 
-
+# Local application data
 data/board.json
 data/settings.json
-
-# Backups are machine-local snapshots, not source. The whole directory is
-# excluded rather than just *.json, so a stray .bak, .zip, or export dropped in
-# here cannot slip into a commit. The app recreates the directory on demand
-# (ensureDirs in server/store.js), so nothing needs to be tracked to keep it.
 data/backups/
+
+# IDE / editor
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+
+# OS / temporary files
+.DS_Store
+Thumbs.db
+
+# Test / coverage artifacts
+coverage/
+.nyc_output/
+
+# TypeScript build metadata
+*.tsbuildinfo
