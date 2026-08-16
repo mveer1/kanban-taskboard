@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { readFile, writeFile } from 'node:fs/promises';
-import { BOARD_FILE } from '../server/paths.js';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { BOARD_FILE, DATA_DIR } from '../server/paths.js';
 
 /**
  * Integration tests against a real server process.
@@ -62,7 +62,7 @@ const FIXTURE = {
 };
 
 let server;
-let original;
+let original = null;
 
 const api = async (path, init) => {
   const res = await fetch(`${BASE}${path}`, {
@@ -77,7 +77,16 @@ const getBoard = async () => (await api('/api/board')).body;
 const onDisk = async () => JSON.parse(await readFile(BOARD_FILE, 'utf8'));
 
 beforeAll(async () => {
-  original = await readFile(BOARD_FILE, 'utf8');
+  await mkdir(DATA_DIR, { recursive: true });
+  try {
+    original = await readFile(BOARD_FILE, 'utf8');
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      original = null;
+    } else {
+      throw err;
+    }
+  }
   // Install the fixture so assertions do not depend on the user's real board.
   await writeFile(BOARD_FILE, `${JSON.stringify(FIXTURE, null, 2)}\n`, 'utf8');
   process.env.API_PORT = String(PORT);
@@ -95,7 +104,11 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // Restore the file byte-for-byte so the suite leaves no trace.
-  await writeFile(BOARD_FILE, original, 'utf8');
+  if (original !== null) {
+    await writeFile(BOARD_FILE, original, 'utf8');
+  } else {
+    await rm(BOARD_FILE, { force: true });
+  }
   await new Promise((resolve) => (server ? server.close(resolve) : resolve()));
 });
 

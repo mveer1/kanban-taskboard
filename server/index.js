@@ -14,7 +14,8 @@ import { settingsRouter } from './routes/settings.js';
 import { ensureDataFiles, watchBoardFile } from './store.js';
 import { DIST_DIR } from './paths.js';
 
-const PORT = Number(process.env.API_PORT ?? 4310);
+const PORT = Number(process.env.PORT ?? process.env.API_PORT ?? 4310);
+const HOST = process.env.HOST ?? '0.0.0.0';
 const app = express();
 
 // data/board.json is git-ignored, so a fresh clone starts with nothing. Seed it
@@ -78,9 +79,9 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, HOST, () => {
   const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
-  console.log(`[server] Task Board API listening on http://localhost:${PORT} (${mode})`);
+  console.log(`[server] Task Board API listening on http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT} (${mode})`);
   if (mode === 'development') {
     console.log('[server] open the app at http://localhost:5173');
   }
