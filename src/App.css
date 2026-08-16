@@ -1,0 +1,70 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: 16px 20px 44px;
+  flex: 1;
+}
+
+/* Stats live below the board, per the layout brief. */
+.board-stats {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.board-stats > .label {
+  display: block;
+  margin-bottom: 11px;
+}
+
+.insights-graph {
+  margin-top: 20px;
+}
+.insights-graph > .label {
+  display: block;
+  margin-bottom: 9px;
+}
+
+/* ---------- splash ---------- */
+
+.splash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  text-align: center;
+}
+.splash h1 {
+  font-size: 1.1rem;
+  margin-bottom: 7px;
+}
+.splash p {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+.splash.error h1 {
+  color: var(--high);
+}
+.splash-hint {
+  margin-top: 12px;
+  font-size: 0.73rem !important;
+  color: var(--text-faint) !important;
+}
+.splash code {
+  font-family: var(--mono);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.9em;
+}

@@ -1,0 +1,86 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: var(--topbar-h);
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-1);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-titles { min-width: 0; }
+.topbar-sub {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  margin-top: 1px;
+}
+
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+/* ---------- save badge ---------- */
+
+.save-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: var(--card);
+  white-space: nowrap;
+}
+.save-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+
+.save-badge.idle .save-dot,
+.save-badge.saved .save-dot { background: var(--low); }
+.save-badge.dirty .save-dot { background: var(--medium); }
+.save-badge.saving .save-dot {
+  background: var(--col-new);
+  animation: pulse 0.9s ease-in-out infinite;
+}
+.save-badge.error {
+  color: var(--high);
+  border-color: #5c2626;
+  background: #2a1717;
+  cursor: help;
+}
+.save-badge.error .save-dot { background: var(--high); }
+
+/* A collaborator's save won; the board was replaced, not lost. Warning, not
+   failure, so it reads as informational. */
+.save-badge.conflict {
+  color: var(--medium);
+  border-color: var(--medium);
+  cursor: help;
+}
+.save-badge.conflict .save-dot { background: var(--medium); }
+
+.topbar-readonly {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px dashed var(--border-strong);
+  white-space: nowrap;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

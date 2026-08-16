@@ -1,0 +1,105 @@
+/** Workspace members and sharing dialog. */
+
+.members-block {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.members-block:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.members-block > .label {
+  display: block;
+  margin-bottom: 9px;
+}
+
+.members-rename {
+  display: flex;
+  gap: 8px;
+}
+
+.members-rename input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- lists ---------- */
+
+.members-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.members-list li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 0.78rem;
+}
+
+.member-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 550;
+}
+
+.member-you {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 5px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--text-faint);
+  font-weight: 600;
+}
+
+.member-email {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.68rem;
+  color: var(--text-faint);
+}
+
+/* Push the controls right when there is no email column to absorb the space. */
+.members-list li > .role-badge,
+.members-list li > .member-role-select {
+  margin-left: auto;
+}
+
+.members-list li > .member-email ~ .role-badge,
+.members-list li > .member-email ~ .member-role-select {
+  margin-left: 0;
+}
+
+.member-role-select {
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  width: auto;
+}
+
+/* ---------- destructive area ---------- */
+
+.members-danger .settings-hint {
+  margin: 0 0 10px;
+  line-height: 1.5;
+}

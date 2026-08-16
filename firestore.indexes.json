@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "//": "Powers listMyInvites() in src/data/workspaces.ts — a collection-group query across every workspace's invites subcollection for the signed-in user's email. Firestore cannot serve a collection-group filter without an explicit index.",
+      "collectionGroup": "invites",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "email", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Powers listBackups() — snapshots newest first, per workspace.",
+      "collectionGroup": "backups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    {
+      "//": "The board and snapshot payloads are large JSON strings that are never queried. Exempting them from indexing avoids the 1500-byte index-entry limit and cuts storage cost.",
+      "collectionGroup": "state",
+      "fieldPath": "data",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "backups",
+      "fieldPath": "data",
+      "indexes": []
+    }
+  ]
+}

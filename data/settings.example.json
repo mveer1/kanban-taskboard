@@ -1,0 +1,35 @@
+{
+  "profile": {
+    "name": "Local user",
+    "email": "you@example.com",
+    "initials": "LU",
+    "avatarColor": "#6ee7b7"
+  },
+  "board": {
+    "density": {
+      "new": "normal",
+      "active": "normal",
+      "hold": "compact",
+      "done": "compact"
+    },
+    "autoExpandActive": true,
+    "showStats": true,
+    "showGraph": true
+  },
+  "appearance": {
+    "theme": "dark",
+    "accent": "#e8e8ea",
+    "radiusScale": "soft"
+  },
+  "data": {
+    "backupRetention": 30,
+    "autosaveDelayMs": 600
+  },
+  "shortcuts": {
+    "enabled": true
+  },
+  "confirmations": {
+    "deleteStory": true,
+    "deleteTask": true
+  }
+}

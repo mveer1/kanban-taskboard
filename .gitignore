@@ -1,0 +1,24 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+npm-debug.log*
+
+.env
+.env.local
+.env.*.local
+
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+
+data/board.json
+data/settings.json
+
+# Backups are machine-local snapshots, not source. The whole directory is
+# excluded rather than just *.json, so a stray .bak, .zip, or export dropped in
+# here cannot slip into a commit. The app recreates the directory on demand
+# (ensureDirs in server/store.js), so nothing needs to be tracked to keep it.
+data/backups/

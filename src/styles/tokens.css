@@ -1,0 +1,79 @@
+/**
+ * Design tokens. Every color, radius, and spacing value in the app resolves
+ * here — component CSS should never hardcode a hex value.
+ *
+ * Base theme is monochrome; pastels appear only on project tags, column
+ * accents, and priority chips.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* surfaces, darkest to lightest */
+  --bg: #0e0e10;
+  --surface-1: #151518;
+  --surface-2: #1b1b1f;
+  --card: #212126;
+  --card-hover: #27272d;
+
+  /* borders */
+  --border: #2b2b32;
+  --border-strong: #3a3a43;
+
+  /* text */
+  --text: #e9e9ec;
+  --text-dim: #9c9ca5;
+  --text-faint: #6a6a74;
+
+  /* priority */
+  --high: #f87171;
+  --medium: #fbbf24;
+  --low: #6ee7b7;
+
+  /* column accents — mirrored in src/config/columns.ts */
+  --col-new: #93c5fd;
+  --col-active: #fcd34d;
+  --col-hold: #c4b5fd;
+  --col-done: #6ee7b7;
+
+  /* soft corners — Settings > Appearance swaps the scale */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.55);
+
+  --sidebar-w: 216px;
+  --topbar-h: 56px;
+
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+:root[data-radius='sharp'] {
+  --r-sm: 3px;
+  --r-md: 4px;
+  --r-lg: 6px;
+}
+
+:root[data-radius='round'] {
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f6f7;
+  --surface-1: #ffffff;
+  --surface-2: #f0f0f2;
+  --card: #ffffff;
+  --card-hover: #f7f7f9;
+  --border: #e2e2e6;
+  --border-strong: #cbcbd2;
+  --text: #17171a;
+  --text-dim: #5c5c66;
+  --text-faint: #8b8b95;
+  --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.18);
+}

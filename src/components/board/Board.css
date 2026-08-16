@@ -1,0 +1,32 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 13px;
+  align-items: start;
+}
+
+.board-empty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  padding: 30px 12px;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+/* Flash highlight when navigating to a story from a link or the graph. */
+.flash {
+  animation: flash 1.3s ease-out;
+}
+@keyframes flash {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(147, 197, 253, 0); }
+  22% { box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5); }
+}
+
+@media (max-width: 1180px) {
+  .board { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+}
+@media (max-width: 640px) {
+  .board { grid-template-columns: 1fr; }
+}

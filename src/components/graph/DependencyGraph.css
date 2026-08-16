@@ -1,0 +1,102 @@
+.graph-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.graph-stage {
+  position: relative;
+}
+
+.graph-host {
+  width: 100%;
+  height: 520px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  cursor: grab;
+}
+.graph-host:active {
+  cursor: grabbing;
+}
+
+.graph-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.graph-ctrl {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+  font-family: var(--sans, system-ui, sans-serif);
+  color: var(--text-dim);
+  background: var(--surface, var(--bg));
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.graph-ctrl:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+
+.graph-id {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--text-dim);
+  user-select: none;
+}
+
+.graph-title {
+  font-size: 12px;
+  fill: var(--text-faint);
+  user-select: none;
+}
+
+.graph-node:hover circle {
+  stroke: var(--text);
+  stroke-width: 3;
+}
+.graph-node:hover .graph-id {
+  fill: var(--text);
+}
+
+.graph-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 0.64rem;
+  color: var(--text-dim);
+}
+.graph-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.graph-legend-line {
+  width: 18px;
+  height: 1.5px;
+  display: inline-block;
+}
+.graph-legend-hint {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-size: 0.62rem;
+}

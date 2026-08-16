@@ -1,0 +1,58 @@
+/** Account dialog. Reuses .login-error from auth/LoginScreen.css. */
+
+.account-facts {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 8px 14px;
+  margin: 0 0 18px;
+  font-size: 0.78rem;
+  align-items: baseline;
+}
+
+.account-facts dt {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.account-facts dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.account-uid {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+.account-none {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+.account-upgrade {
+  padding: 14px;
+  margin-bottom: 18px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--medium);
+  background: var(--surface-2);
+  display: grid;
+  gap: 10px;
+}
+
+.account-upgrade > .label {
+  color: var(--medium);
+}
+
+.account-upgrade .settings-hint {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.account-signout {
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}

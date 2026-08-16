@@ -1,0 +1,183 @@
+/* Shared by StoryCardCompact and StoryCardNormal. */
+
+.story-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  transition: border-color 0.12s, background 0.12s;
+}
+.story-card:hover {
+  border-color: var(--border-strong);
+}
+.story-card.blocked {
+  border-left: 3px solid var(--high);
+}
+
+/* ---------- compact tile ---------- */
+
+.story-card.compact {
+  padding: 8px 9px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.story-card.compact:hover {
+  background: var(--card-hover);
+}
+
+.compact-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.compact-title {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+.compact-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 10px;
+}
+.compact-meta .progress {
+  flex: 1;
+  min-width: 34px;
+}
+.compact-block {
+  font-size: 0.66rem;
+  color: var(--high);
+}
+
+/* ---------- normal card ---------- */
+
+.card-body {
+  padding: 11px 12px;
+  cursor: grab;
+}
+.card-body:active {
+  cursor: grabbing;
+}
+
+.card-badges {
+  margin-bottom: 6px;
+}
+
+.card-title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+  margin-bottom: 5px;
+}
+
+.card-desc {
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+  margin-bottom: 7px;
+}
+
+.card-meta {
+  margin-bottom: 2px;
+}
+
+.card-progress {
+  margin: 8px 0 2px;
+}
+
+/* ---------- links ---------- */
+
+.card-links {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.link-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.63rem;
+}
+.link-kind {
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.55rem;
+  min-width: 68px;
+  flex-shrink: 0;
+}
+.link-target {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.63rem;
+  color: var(--col-new);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.link-target:hover:not(:disabled) {
+  text-decoration: underline;
+  background: none;
+  border-color: transparent;
+}
+.link-target.done { color: var(--low); }
+.link-target.gating { color: var(--high); }
+
+.card-blocked {
+  margin-top: 7px;
+}
+
+/* ---------- footer ---------- */
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.expand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  padding: 2px 3px;
+}
+.expand:hover:not(:disabled) {
+  color: var(--text);
+  background: none;
+  border-color: transparent;
+}
+.caret {
+  display: inline-block;
+  font-size: 0.5rem;
+  transition: transform 0.15s;
+}
+.caret.open {
+  transform: rotate(90deg);
+}
+
+.card-tasks {
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: 7px 10px 9px;
+}

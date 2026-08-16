@@ -1,0 +1,51 @@
+{
+  "name": "taskboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Personal three-tier task board: Projects -> Stories -> Tasks. Data lives in data/board.json.",
+  "scripts": {
+    "dev": "concurrently -n api,web -c magenta,cyan \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "node --watch server/index.js",
+    "dev:web": "vite",
+    "build": "tsc -b && vite build",
+    "build:pages": "cross-env VITE_DATA_BACKEND=firebase VITE_BASE=/kanban-taskboard/ npm run build",
+    "preview": "vite preview",
+    "start": "npm run build && cross-env NODE_ENV=production node server/index.js",
+    "serve": "cross-env NODE_ENV=production node server/index.js",
+    "validate": "node scripts/validate.js",
+    "backup": "node scripts/backup.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "chart.js": "^4.4.4",
+    "d3": "^7.9.0",
+    "express": "^4.21.1",
+    "firebase": "^11.10.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "sortablejs": "^1.15.3"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/sortablejs": "^1.15.8",
+    "@vitejs/plugin-react": "^4.3.3",
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "typescript": "^5.6.3",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true,
+    "@firebase/util": true,
+    "protobufjs": true
+  }
+}

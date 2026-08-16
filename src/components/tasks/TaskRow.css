@@ -1,0 +1,142 @@
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 6px 7px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.task-row:hover {
+  border-color: var(--border-strong);
+}
+
+.task-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title {
+  font-size: 0.75rem;
+  color: var(--text);
+  line-height: 1.35;
+}
+.task-row.done .task-title {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.task-desc {
+  font-size: 0.66rem;
+  color: var(--text-faint);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.task-meta {
+  margin-top: 4px;
+  gap: 5px;
+}
+
+/* ---------- status toggle ----------
+ *
+ * State fill/border come from --st-bg / --st-border so the hover rule can
+ * re-assert them. Without that, the global `button:hover` in global.css wins on
+ * specificity and repaints the toggle as a plain grey box mid-hover.
+ * Hover is a subtle zoom only — it must never change the state's appearance.
+ */
+
+.status-toggle {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1.5px solid var(--st-border, var(--border-strong));
+  background: var(--st-bg, transparent);
+  padding: 0;
+  flex-shrink: 0;
+  margin-top: 3px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.status-toggle:hover:not(:disabled) {
+  /* Re-asserted so the generic button:hover cannot override the state. */
+  background: var(--st-bg, transparent);
+  border-color: var(--st-border, var(--border-strong));
+  transform: scale(1.18);
+}
+
+.status-toggle:active:not(:disabled) {
+  transform: scale(1.04);
+}
+
+.status-toggle.new {
+  --st-border: var(--col-new);
+}
+
+.status-toggle.active {
+  --st-border: var(--col-active);
+  --st-bg: #3a2c10;
+}
+.status-toggle.active::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--col-active);
+  border-radius: 50%;
+}
+
+.status-toggle.hold {
+  --st-border: var(--col-hold);
+  --st-bg: #26222e;
+}
+.status-toggle.hold::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 50%;
+  height: 1.5px;
+  transform: translateY(-50%);
+  background: var(--col-hold);
+}
+
+.status-toggle.done {
+  --st-border: var(--col-done);
+  --st-bg: var(--col-done);
+}
+.status-toggle.done::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #14251f;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* ---------- add ---------- */
+
+.add-task {
+  font-size: 0.66rem;
+  color: var(--text-faint);
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  padding: 5px;
+  margin-top: 1px;
+}
+.add-task:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--border-strong);
+  background: none;
+}

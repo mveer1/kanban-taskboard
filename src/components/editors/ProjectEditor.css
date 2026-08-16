@@ -1,0 +1,71 @@
+.project-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.project-row {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--card);
+  padding: 7px 9px;
+}
+.project-row.editing {
+  border-color: var(--border-strong);
+}
+
+.project-row-main {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.project-row-main input[type='text'] {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border-color: transparent;
+  padding: 4px 6px;
+}
+.project-row-main input[type='text']:hover,
+.project-row-main input[type='text']:focus {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+
+.project-count {
+  font-size: 0.64rem;
+  color: var(--text-faint);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.project-row-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 11px 4px 4px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.project-desc-input {
+  font-size: 0.73rem;
+}
+
+.project-new {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* Tag labels found on items but missing from the registry. */
+.tag-orphans {
+  margin-top: 16px;
+  padding: 11px 12px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+.tag-orphans > .label {
+  display: block;
+  margin-bottom: 4px;
+}

@@ -1,0 +1,39 @@
+name: CI
+
+# Runs on every push and pull request. The Pages workflow repeats these checks
+# before deploying, so a red build never reaches production — this job exists to
+# give the same signal on branches that are not deployed.
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build (local backend)
+        run: npm run build
+
+      - name: Build (firebase backend)
+        # Confirms the Firestore adapter and auth screens compile and bundle even
+        # without credentials. The app renders the setup screen at runtime.
+        env:
+          VITE_DATA_BACKEND: firebase
+        run: npm run build

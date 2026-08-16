@@ -1,0 +1,85 @@
+/**
+ * Right-click menu. Positioned against the viewport, so it sits above modals
+ * (z-index 100) as well as the board.
+ */
+
+.ctx-menu {
+  position: fixed;
+  z-index: 200;
+  min-width: 208px;
+  padding: 5px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-modal);
+  animation: ctx-in 0.09s ease-out;
+}
+
+@keyframes ctx-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+.ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 6px 9px;
+  font-size: 0.76rem;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  border-radius: var(--r-sm);
+}
+
+/* One rule for hover and keyboard focus: `active` is set by both, so the
+   highlight cannot disagree between the two input methods. */
+.ctx-item.active:not(:disabled) {
+  background: var(--card);
+  color: var(--text);
+}
+
+.ctx-item:hover:not(:disabled) {
+  background: var(--card);
+  color: var(--text);
+  border-color: transparent;
+}
+
+.ctx-item.danger {
+  color: var(--high);
+}
+
+.ctx-item.danger.active:not(:disabled),
+.ctx-item.danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--high) 14%, transparent);
+  color: var(--high);
+}
+
+.ctx-item:disabled {
+  color: var(--text-faint);
+  opacity: 0.6;
+}
+
+.ctx-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ctx-hint {
+  font-size: 0.65rem;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.ctx-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--border);
+}

@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "version": 3,
+    "updated": "2026-01-01",
+    "idPrefixes": {
+      "project": "p-",
+      "story": "S-",
+      "task": "T-"
+    }
+  },
+
+  "projects": [
+    { "id": "p-general", "label": "General", "color": "#93c5fd", "description": "Default project. Rename it or add your own." }
+  ],
+
+  "tags": [
+    { "label": "example", "color": "#c4b5fd", "description": "Delete this once you have your own tags." }
+  ],
+
+  "stories": [
+    {
+      "id": "S-1",
+      "title": "Get to know the board",
+      "description": "Drag this card between columns, click it to open the detail view, then delete it.",
+      "status": "new",
+      "project": "p-general",
+      "priority": "medium",
+      "due": null,
+      "estimate": 1,
+      "tags": ["example"],
+      "links": [],
+      "notes": [],
+      "created": "2026-01-01",
+      "completedAt": null
+    }
+  ],
+
+  "tasks": [
+    { "id": "T-1", "storyId": "S-1", "title": "Click the circle to mark a task done", "description": null, "status": "new", "priority": "low", "due": null, "estimate": null, "tags": [], "notes": [], "created": "2026-01-01", "completedAt": null }
+  ]
+}

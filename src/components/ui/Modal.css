@@ -1,0 +1,113 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 6, 8, 0.7);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 44px 16px;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.modal {
+  background: var(--surface-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-modal);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.modal-md { max-width: 580px; }
+.modal-lg { max-width: 780px; }
+.modal-xl { max-width: 1040px; }
+
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-titles { min-width: 0; }
+.modal-titles h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.modal-sub {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+.modal-head .icon { margin-left: auto; }
+
+.modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  max-height: calc(100vh - 220px);
+}
+
+.modal-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+
+/* ---------- form fields ---------- */
+
+.field { margin-bottom: 12px; }
+.field > .label {
+  display: block;
+  margin-bottom: 4px;
+}
+.field-hint {
+  font-size: 0.66rem;
+  color: var(--text-faint);
+  margin-top: 3px;
+}
+
+.field-row {
+  display: grid;
+  gap: 12px;
+}
+.field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+@media (max-width: 620px) {
+  .field-row.cols-2,
+  .field-row.cols-3 { grid-template-columns: 1fr; }
+}
+
+/* Bordered box used by the links / notes sub-editors. */
+.sub-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 9px;
+  background: var(--card);
+}
+.sub-panel-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  padding: 6px 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  margin-bottom: 5px;
+}
+.sub-panel-item .grow { flex: 1; min-width: 0; }
+.sub-panel-add {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}

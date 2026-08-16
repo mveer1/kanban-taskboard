@@ -1,0 +1,113 @@
+.user-menu {
+  position: relative;
+}
+
+.user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid transparent;
+  padding: 3px 5px 3px 3px;
+  border-radius: var(--r-pill);
+}
+.user-trigger:hover:not(:disabled) {
+  background: var(--card);
+  border-color: var(--border);
+}
+.user-trigger .caret {
+  font-size: 0.55rem;
+  color: var(--text-faint);
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 7px);
+  width: 244px;
+  background: var(--surface-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-modal);
+  padding: 6px;
+  z-index: 60;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 8px;
+}
+.user-card-text { min-width: 0; }
+.user-card-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.user-card-email {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 5px 0;
+}
+
+.user-action {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.76rem;
+  padding: 7px 9px;
+  border-radius: var(--r-sm);
+}
+.user-action:hover:not(:disabled) {
+  background: var(--card);
+  color: var(--text);
+  border-color: transparent;
+}
+
+.user-note {
+  font-size: 0.62rem;
+  color: var(--text-faint);
+  padding: 3px 9px 5px;
+  overflow-wrap: anywhere;
+}
+
+/* Marks an anonymous session on the collapsed avatar, so the state is visible
+   without opening the menu. */
+.user-guest-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--medium);
+}
+
+/* Nudge toward making a guest session permanent. Reads as a notice, not a menu
+   item, because the consequence of ignoring it is losing the board. */
+.user-callout {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  padding: 8px 9px;
+  margin: 2px 0;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--medium);
+  background: var(--surface-2);
+  color: var(--medium);
+}
+
+.user-callout:hover:not(:disabled) {
+  background: var(--card-hover);
+  border-color: var(--medium);
+  color: var(--medium);
+}

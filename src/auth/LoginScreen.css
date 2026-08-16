@@ -1,0 +1,224 @@
+/**
+ * Sign-in screen. Same token vocabulary as the rest of the app — no hardcoded
+ * colors — so it follows the theme and radius settings that were already applied
+ * to <html> before the session resolves.
+ */
+
+.login-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, var(--surface-2), transparent 70%),
+    var(--bg);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px 26px 22px;
+  box-shadow: var(--shadow-modal);
+}
+
+/* ---------- header ---------- */
+
+.login-head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.login-mark {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-md);
+  background: var(--col-done);
+  color: var(--bg);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+
+.login-head h1 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.login-head p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ---------- providers ---------- */
+
+.login-providers {
+  display: grid;
+  gap: 8px;
+}
+
+.provider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 550;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--card);
+  color: var(--text);
+}
+
+.provider-glyph {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+
+.provider.google .provider-glyph {
+  background: var(--col-new);
+  color: var(--bg);
+}
+
+.provider.github .provider-glyph {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* ---------- divider ---------- */
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 14px;
+  color: var(--text-faint);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ---------- form ---------- */
+
+.login-form {
+  display: grid;
+  gap: 11px;
+}
+
+.login-field {
+  display: grid;
+  gap: 5px;
+}
+
+.login-field > span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.login-field input {
+  width: 100%;
+  padding: 9px 11px;
+  font-size: 13px;
+}
+
+.login-submit {
+  margin-top: 3px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.login-error,
+.login-notice {
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+}
+
+.login-error {
+  color: var(--high);
+  border-color: var(--high);
+  background: var(--surface-2);
+}
+
+.login-notice {
+  color: var(--low);
+  border-color: var(--low);
+  background: var(--surface-2);
+}
+
+/* ---------- footer links ---------- */
+
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.login-card .link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.login-card .link:hover:not(:disabled) {
+  color: var(--text);
+  background: none;
+  border: none;
+}
+
+.login-guest {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.login-guest .ghost {
+  width: 100%;
+  font-size: 12.5px;
+}
+
+.login-hint {
+  margin: 9px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--text-faint);
+}

@@ -1,0 +1,40 @@
+.filterbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 9px 12px;
+  margin-bottom: 14px;
+}
+
+.facet {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.search-facet {
+  margin-left: auto;
+  flex: 0 1 280px;
+  min-width: 190px;
+}
+.search-facet input {
+  flex: 1;
+}
+
+/* Opens the tag registry dialog from the filter row. */
+.chip-manage {
+  border-style: dashed;
+  color: var(--text-faint);
+}
+
+@media (max-width: 900px) {
+  .search-facet {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+}
