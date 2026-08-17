@@ -137,7 +137,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
       };
       const resolved = normalizeSettings(stored, fallbackProfile);
       setSettings(resolved);
-      if (!stored) void source.saveSettings(resolved).catch(() => {});
+      if (!stored) void source.saveSettings(resolved).catch(() => { });
 
       setLoadError(null);
     } catch (err) {
@@ -193,7 +193,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         setBoard(outcome.latest.board);
         setSaveErrors([
           'Another session saved first, so your last change was not applied. ' +
-            'The board has been refreshed with their version.',
+          'The board has been refreshed with their version.',
         ]);
         setSaveState('conflict');
         return;
@@ -236,16 +236,32 @@ export function BoardProvider({ children }: { children: ReactNode }) {
     [flush, autosaveDelay, canEdit],
   );
 
-  /* Save pending edits if the tab is closing. */
+  /* Save pending edits if the tab is closing or the provider unmounts */
   useEffect(() => {
-    const onHide = () => {
+    const flushSync = () => {
+      if (!saveTimer.current) return;
+      window.clearTimeout(saveTimer.current);
+      saveTimer.current = null;
+      const current = boardRef.current;
+      if (!current) return;
+
+      navigator.sendBeacon(
+        '/api/board',
+        new Blob([JSON.stringify(current)], {
+          type:
+            '/application/json'
+        }),
+      );
+    };
+    window.addEventListener('beforeunload', flushSync);
+    return () => {
+      window.removeEventListener('beforeunload', flushSync);
       if (saveTimer.current) {
         window.clearTimeout(saveTimer.current);
+        saveTimer.current = null;
         void flush();
       }
     };
-    window.addEventListener('beforeunload', onHide);
-    return () => window.removeEventListener('beforeunload', onHide);
   }, [flush]);
 
   /* ---------------- external changes ---------------- */
@@ -483,7 +499,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         setSettings((prev) => {
           if (!prev) return prev;
           const next = { ...prev, ...patch };
-          void source?.saveSettings(next).catch(() => {});
+          void source?.saveSettings(next).catch(() => { });
           return next;
         });
       },

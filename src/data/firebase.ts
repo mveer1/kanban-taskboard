@@ -101,6 +101,16 @@ export function toDataError(err: unknown, fallback = 'Firestore request failed')
       'config',
     );
   }
+
+  if (code === 'invalid-argument' && message.includes('1500 bytes')) {
+    return new DataError(
+      'Firestore is rejecting the board because the data field is being indexed. ' +
+      'Deploy the index exemptions: firebase deploy --only firestore:indexes ' +
+      '(see DEPLOYMENT.md step 6).',
+      'config',
+    );
+  }
+
   return new DataError(message || fallback, 'unknown');
 }
 
@@ -180,8 +190,8 @@ export function createFirestoreDataSource(options: FirestoreSourceOptions): Data
         status: 'invalid',
         errors: [
           `Board is ${(size / 1024).toFixed(0)} KB, over the ` +
-            `${(MAX_BOARD_BYTES / 1024).toFixed(0)} KB per-document limit. ` +
-            'Archive or delete completed stories.',
+          `${(MAX_BOARD_BYTES / 1024).toFixed(0)} KB per-document limit. ` +
+          'Archive or delete completed stories.',
         ],
       };
     }
@@ -228,9 +238,9 @@ export function createFirestoreDataSource(options: FirestoreSourceOptions): Data
       // recoverability, not the save.
       const backup = result.previous
         ? await writeBackup(db, workspaceId, uid, result.previous, backupRetention).catch((err) => {
-            console.warn('[firestore] snapshot failed', err);
-            return null;
-          })
+          console.warn('[firestore] snapshot failed', err);
+          return null;
+        })
         : null;
 
       return { status: 'saved', rev: result.rev, backup };
@@ -390,7 +400,7 @@ async function writeBackup(
       query(collection(db, paths.backups(workspaceId)), orderBy('createdAt', 'desc')),
     );
     const stale = all.docs.slice(retention);
-    await Promise.all(stale.map((d) => deleteDoc(d.ref).catch(() => {})));
+    await Promise.all(stale.map((d) => deleteDoc(d.ref).catch(() => { })));
   } catch (err) {
     console.warn('[firestore] snapshot pruning skipped', err);
   }

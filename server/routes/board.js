@@ -34,6 +34,11 @@ boardRouter.put('/board', async (req, res) => {
   res.json({ ok: true, backup: result.backup });
 });
 
+boardRouter.post('/board', async (req, res) => {
+  await writeBoard(req.body);
+  res.status(204).end();
+});
+
 boardRouter.post('/validate', (req, res) => {
   const { ok, errors } = validateBoard(req.body);
   res.status(ok ? 200 : 422).json({ ok, errors });
