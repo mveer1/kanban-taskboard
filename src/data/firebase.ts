@@ -82,12 +82,13 @@ export const paths = {
 
 /** Firestore error codes mapped onto the shared error type. */
 export function toDataError(err: unknown, fallback = 'Firestore request failed'): DataError {
+  console.error('[firestore error]', fallback, err);
   const code = (err as { code?: string })?.code ?? '';
   const message = err instanceof Error ? err.message : String(err);
 
   if (code === 'permission-denied') {
     return new DataError(
-      'You do not have permission to do that in this workspace.',
+      `${fallback}: permission denied by Firestore rules.`,
       'permission',
     );
   }

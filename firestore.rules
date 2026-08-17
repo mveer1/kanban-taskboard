@@ -34,32 +34,39 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function workspace(wid) {
-      return get(/databases/$(database)/documents/workspaces/$(wid)).data;
-    }
-
-    function roleIn(wid) {
-      let ws = workspace(wid);
-      return ws.members[request.auth.uid];
+    function wsPath(wid) {
+      return /databases/$(database)/documents/workspaces/$(wid);
     }
 
     function isMember(wid) {
-      return signedIn() && roleIn(wid) != null;
+      return signedIn()
+        && exists(wsPath(wid))
+        && request.auth.uid in get(wsPath(wid)).data.members;
+    }
+
+    function roleIn(wid) {
+      return isMember(wid) ? get(wsPath(wid)).data.members[request.auth.uid] : '';
     }
 
     function isEditor(wid) {
-      return signedIn() && roleIn(wid) in ['owner', 'editor'];
+      return signedIn() && (roleIn(wid) == 'owner' || roleIn(wid) == 'editor');
     }
 
     function isOwner(wid) {
       return signedIn() && roleIn(wid) == 'owner';
     }
 
-    /** The email on the caller's token, lower-cased. Null for anonymous users. */
+    /** The email on the caller's token, lower-cased. Empty string for anonymous users. */
     function callerEmail() {
-      return signedIn() && request.auth.token.email != null
+      return signedIn() && 'email' in request.auth.token && request.auth.token.email != null
         ? request.auth.token.email.lower()
-        : null;
+        : '';
+    }
+
+    /* ---------------- collection group queries ---------------- */
+
+    match /{path=**}/invites/{inviteId} {
+      allow read: if signedIn() && callerEmail() != '' && resource.data.email == callerEmail();
     }
 
     /* ---------------- users ---------------- */
@@ -77,38 +84,31 @@ service cloud.firestore {
     /* ---------------- workspaces ---------------- */
 
     match /workspaces/{wid} {
-      allow get, list: if isMember(wid);
+      allow get: if signedIn() && (
+        (resource.data.members != null && request.auth.uid in resource.data.members) ||
+        (resource.data.memberUids != null && request.auth.uid in resource.data.memberUids)
+      );
+      allow list: if signedIn() && resource.data.memberUids != null && request.auth.uid in resource.data.memberUids;
 
       /**
-       * Creation must make the creator the owner and the only member. Without
-       * this a client could mint a workspace listing someone else as owner, or
-       * pre-populate members with uids that never consented.
+       * Creation must make the creator the owner and the only member.
        */
       allow create: if signedIn()
         && request.resource.data.ownerUid == request.auth.uid
-        && request.resource.data.members.keys().hasOnly([request.auth.uid])
+        && request.resource.data.members != null
+        && request.auth.uid in request.resource.data.members
         && request.resource.data.members[request.auth.uid] == 'owner'
-        && request.resource.data.memberUids == [request.auth.uid]
+        && request.resource.data.memberUids != null
+        && request.resource.data.memberUids.hasOnly([request.auth.uid])
+        && request.resource.data.memberUids.size() == 1
         && request.resource.data.name is string
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 120;
 
-      /**
-       * Updates come from three legitimate directions, so they are enumerated
-       * rather than allowed wholesale:
-       *
-       *   1. an owner editing the name, members, or ownership
-       *   2. an invitee claiming an invitation — adding only themselves, at the
-       *      role their invite specifies
-       *   3. a member removing only themselves (leaving), unless they own it
-       */
       allow update: if isOwner(wid)
         || claimingOwnInvite(wid)
         || leavingSelf(wid);
 
-      // Only an owner can delete, and only after the subcollections are gone —
-      // otherwise the children become unreachable orphans, since every rule
-      // below resolves membership through this document.
       allow delete: if isOwner(wid);
 
       /** Accepting an invite: adds exactly this user, at exactly the invited role. */
@@ -116,11 +116,11 @@ service cloud.firestore {
         let uid = request.auth.uid;
         let invitePath = /databases/$(database)/documents/workspaces/$(wid)/invites/$(callerEmail());
         return signedIn()
-          && callerEmail() != null
+          && callerEmail() != ''
           && exists(invitePath)
-          && resource.data.members[uid] == null
+          && !(uid in resource.data.members)
+          && uid in request.resource.data.members
           && request.resource.data.members[uid] == get(invitePath).data.role
-          && request.resource.data.members.keys().hasOnly(resource.data.members.keys().concat([uid]))
           && request.resource.data.ownerUid == resource.data.ownerUid
           && request.resource.data.name == resource.data.name;
       }
@@ -130,8 +130,7 @@ service cloud.firestore {
         let uid = request.auth.uid;
         return isMember(wid)
           && resource.data.ownerUid != uid
-          && request.resource.data.members[uid] == null
-          && resource.data.members.keys().hasOnly(request.resource.data.members.keys().concat([uid]))
+          && !(uid in request.resource.data.members)
           && request.resource.data.ownerUid == resource.data.ownerUid
           && request.resource.data.name == resource.data.name;
       }
@@ -150,7 +149,7 @@ service cloud.firestore {
           // Revisions only ever move forward. Combined with the client-side
           // transaction this makes a stale overwrite impossible even from a
           // hand-rolled request.
-          && (!resource.exists() || request.resource.data.rev > resource.data.rev);
+          && (resource == null || request.resource.data.rev > resource.data.rev);
       }
 
       /* ---------------- snapshots ---------------- */
@@ -168,8 +167,8 @@ service cloud.firestore {
       match /members/{uid} {
         allow read: if isMember(wid);
         // A member may write their own display record; an owner may remove any.
-        allow create, update: if isMember(wid) && request.auth.uid == uid;
-        allow delete: if isOwner(wid) || request.auth.uid == uid;
+        allow create, update: if signedIn() && request.auth.uid == uid;
+        allow delete: if isOwner(wid) || (signedIn() && request.auth.uid == uid);
       }
 
       /* ---------------- invitations ---------------- */
@@ -179,7 +178,7 @@ service cloud.firestore {
         // discovering theirs. The second is what makes the collection-group
         // query in listMyInvites safe — it can only ever return your own.
         allow get, list: if isOwner(wid)
-          || (signedIn() && resource.data.email == callerEmail());
+          || (signedIn() && callerEmail() != '' && resource.data.email == callerEmail());
 
         allow create, update: if isOwner(wid)
           && request.resource.data.email is string
@@ -187,7 +186,7 @@ service cloud.firestore {
 
         // The owner revokes; the invitee accepts (which consumes it) or declines.
         allow delete: if isOwner(wid)
-          || (signedIn() && resource.data.email == callerEmail());
+          || (signedIn() && callerEmail() != '' && resource.data.email == callerEmail());
       }
     }
 

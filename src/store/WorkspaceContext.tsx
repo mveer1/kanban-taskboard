@@ -95,7 +95,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     try {
       const [list, pending] = await Promise.all([
         listWorkspaces(user.uid),
-        listMyInvites(user.email),
+        listMyInvites(user.email).catch((err) => {
+          console.warn('[workspaces] listMyInvites failed:', err);
+          return [];
+        }),
       ]);
       setInvites(pending);
       setError(null);
@@ -107,8 +110,16 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
           ? 'Guest workspace'
           : `${(user.displayName || user.email || 'My').split(/[\s@]/)[0]}'s workspace`;
         const id = await createWorkspaceDoc(user, label);
-        const created = await listWorkspaces(user.uid);
-        setWorkspaces(created);
+        const createdWorkspace: Workspace = {
+          id,
+          name: label,
+          ownerUid: user.uid,
+          role: 'owner',
+          memberCount: 1,
+          updatedAt: new Date().toISOString(),
+        };
+        const created = await listWorkspaces(user.uid).catch(() => []);
+        setWorkspaces(created.length > 0 && created.some((w) => w.id === id) ? created : [createdWorkspace, ...created]);
         setActiveId(id);
         return;
       }
@@ -170,7 +181,16 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       create: async (name) => {
         if (!user) return;
         const id = await createWorkspaceDoc(user, name);
-        setWorkspaces(await listWorkspaces(user.uid));
+        const createdWorkspace: Workspace = {
+          id,
+          name: name.trim() || 'My workspace',
+          ownerUid: user.uid,
+          role: 'owner',
+          memberCount: 1,
+          updatedAt: new Date().toISOString(),
+        };
+        const list = await listWorkspaces(user.uid).catch(() => []);
+        setWorkspaces(list.length > 0 && list.some((w) => w.id === id) ? list : [createdWorkspace, ...list]);
         setActiveId(id);
       },
 
