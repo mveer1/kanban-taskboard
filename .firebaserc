@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "kanban-taskboard-bf4c3"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }
