@@ -15,7 +15,6 @@ import {
   type Firestore,
 } from 'firebase/firestore';
 import { getDb } from '@/lib/firebase';
-import { starterBoard } from './starter';
 import { isoFrom, paths, toDataError } from './firebase';
 import {
   DataError,
@@ -182,13 +181,6 @@ export async function createWorkspace(
       email: user.email,
       displayName: user.displayName,
       joinedAt: serverTimestamp(),
-    });
-
-    batch.set(doc(db, paths.board(ref.id)), {
-      data: JSON.stringify(starterBoard()),
-      rev: 1,
-      updatedAt: serverTimestamp(),
-      updatedBy: user.uid,
     });
 
     await batch.commit();
