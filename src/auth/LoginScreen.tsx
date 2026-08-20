@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from './AuthContext';
 import './LoginScreen.css';
 
@@ -64,7 +65,12 @@ export function LoginScreen() {
 
   return (
     <div className="login-screen">
-      <div className="login-card">
+      <motion.div
+        className="login-card"
+        initial={{ opacity: 0, scale: 0.97, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+      >
         <header className="login-head">
           <div className="login-mark">TB</div>
           <h1>Task Board</h1>
@@ -72,29 +78,43 @@ export function LoginScreen() {
         </header>
 
         <div className="login-providers">
-          <button
+          <motion.button
             className="provider google"
             disabled={busy}
             onClick={() => void run(() => auth.signInWith('google'))}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, type: 'spring', bounce: 0, duration: 0.4 }}
           >
             <span className="provider-glyph" aria-hidden="true">G</span>
             Continue with Google
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             className="provider github"
             disabled={busy}
             onClick={() => void run(() => auth.signInWith('github'))}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, type: 'spring', bounce: 0, duration: 0.4 }}
           >
             <span className="provider-glyph" aria-hidden="true">◑</span>
             Continue with GitHub
-          </button>
+          </motion.button>
         </div>
 
         <div className="login-divider"><span>or</span></div>
 
         <form className="login-form" onSubmit={submit}>
+          <AnimatePresence mode="popLayout">
           {mode === 'signup' ? (
-            <label className="login-field">
+            <motion.label
+              key="name-field"
+              className="login-field"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
+            >
               <span>Name</span>
               <input
                 type="text"
@@ -103,8 +123,9 @@ export function LoginScreen() {
                 placeholder="Ada Lovelace"
                 onChange={(e) => setName(e.target.value)}
               />
-            </label>
+            </motion.label>
           ) : null}
+          </AnimatePresence>
 
           <label className="login-field">
             <span>Email</span>
@@ -118,8 +139,16 @@ export function LoginScreen() {
             />
           </label>
 
+          <AnimatePresence mode="popLayout">
           {mode !== 'reset' ? (
-            <label className="login-field">
+            <motion.label
+              key="password-field"
+              className="login-field"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
+            >
               <span>Password</span>
               <input
                 type="password"
@@ -130,8 +159,9 @@ export function LoginScreen() {
                 placeholder="At least 6 characters"
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </label>
+            </motion.label>
           ) : null}
+          </AnimatePresence>
 
           {auth.error ? <p className="login-error" role="alert">{auth.error}</p> : null}
           {notice ? <p className="login-notice">{notice}</p> : null}
@@ -165,7 +195,7 @@ export function LoginScreen() {
             user menu to keep it.
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

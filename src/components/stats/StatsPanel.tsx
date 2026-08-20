@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import type { Board, Story } from '@/types/board';
 import { computeStats } from '@/store/selectors';
+import { useResolvedTheme } from '@/hooks/useAppearance';
 import { applyChartTheme } from './chartSetup';
 import { StatusChart } from './StatusChart';
 import { ProjectPointsChart } from './ProjectPointsChart';
@@ -43,9 +44,12 @@ export function StatsPanel({
   stories: Story[];
   compact?: boolean;
 }) {
+  // Chart.js caches its colors as JS values, so a theme change needs the
+  // defaults re-applied and the charts rebuilt — CSS alone cannot restyle them.
+  const theme = useResolvedTheme();
   useEffect(() => {
     applyChartTheme();
-  }, []);
+  }, [theme]);
 
   const stats = computeStats(board, stories);
 
@@ -71,7 +75,9 @@ export function StatsPanel({
       </div>
 
       {compact ? null : (
-        <div className="charts">
+        // Keyed on the theme so Chart.js re-instantiates with the new defaults
+        // and freshly resolved axis colors.
+        <div className="charts" key={theme}>
           <div className="chart-card">
             <h3 className="label">Status breakdown</h3>
             <div className="chart-body">

@@ -26,11 +26,12 @@ body {
 h1 {
   font-size: 1.05rem;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 h2 {
   font-size: 0.95rem;
   font-weight: 600;
+  letter-spacing: -0.015em;
 }
 h3 {
   font-size: 0.8rem;
@@ -65,11 +66,14 @@ button {
   padding: 6px 11px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  transition: background 0.12s, border-color 0.12s, color 0.12s, transform 160ms var(--ease-out);
 }
 button:hover:not(:disabled) {
   background: var(--card-hover);
   border-color: var(--border-strong);
+}
+button:active:not(:disabled) {
+  transform: scale(0.97);
 }
 button:disabled {
   opacity: 0.45;
@@ -202,7 +206,7 @@ textarea {
   font-weight: 600;
   padding: 2px 8px;
   border-radius: var(--r-sm);
-  color: #17171a;
+  color: var(--on-pastel);
   white-space: nowrap;
 }
 
@@ -228,18 +232,18 @@ textarea {
 }
 .prio.high {
   color: var(--high);
-  border-color: #5c2626;
-  background: #2a1717;
+  border-color: var(--prio-high-border);
+  background: var(--prio-high-bg);
 }
 .prio.medium {
   color: var(--medium);
-  border-color: #574119;
-  background: #2a2113;
+  border-color: var(--prio-medium-border);
+  background: var(--prio-medium-bg);
 }
 .prio.low {
   color: var(--low);
-  border-color: #1f4d3c;
-  background: #14251f;
+  border-color: var(--prio-low-border);
+  background: var(--prio-low-bg);
 }
 
 .due {
@@ -279,4 +283,24 @@ textarea {
   text-align: center;
   padding: 22px 8px;
   font-style: italic;
+}
+
+/* ---------- accessibility ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  button:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .sidebar, .topbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }

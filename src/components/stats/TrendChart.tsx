@@ -1,7 +1,7 @@
 import { Line } from 'react-chartjs-2';
 import type { Board, Story } from '@/types/board';
 import { completionTrend } from '@/store/selectors';
-import { axisOptions } from './chartSetup';
+import { getAxisOptions } from './chartSetup';
 
 /** Cumulative tasks completed over time, from each task's completedAt date. */
 export function TrendChart({ board, stories }: { board: Board; stories: Story[] }) {
@@ -38,8 +38,8 @@ export function TrendChart({ board, stories }: { board: Board; stories: Story[] 
       options={{
         plugins: { legend: { display: false } },
         scales: {
-          x: { ...axisOptions, grid: { display: false } },
-          y: { ...axisOptions, beginAtZero: true, ticks: { precision: 0, padding: 6 } },
+          x: { ...getAxisOptions(), grid: { display: false } },
+          y: { ...getAxisOptions(), beginAtZero: true, ticks: { precision: 0, padding: 6 } },
         },
       }}
     />

@@ -1,5 +1,6 @@
 import { Doughnut } from 'react-chartjs-2';
 import { COLUMNS } from '@/config/columns';
+import { statusColors } from './chartSetup';
 import type { BoardStats } from '@/store/selectors';
 
 /** Story distribution across the four columns. */
@@ -9,7 +10,7 @@ export function StatusChart({ stats }: { stats: BoardStats }) {
     datasets: [
       {
         data: COLUMNS.map((c) => stats.byStatus[c.id]),
-        backgroundColor: COLUMNS.map((c) => c.accent),
+        backgroundColor: statusColors(),
         borderColor: 'transparent',
         borderWidth: 0,
         hoverOffset: 6,

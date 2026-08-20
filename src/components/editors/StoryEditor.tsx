@@ -4,6 +4,7 @@ import { COLUMNS, PRIORITIES } from '@/config/columns';
 import { findStory, nextId, today, withStatus } from '@/store/selectors';
 import { useBoard, useBoardStore } from '@/store/BoardContext';
 import { useUi } from '@/store/UiContext';
+import { useSticky } from '@/hooks/useSticky';
 import { useToast } from '@/components/ui/Toast';
 import { Field, FieldRow, Modal } from '@/components/ui/Modal';
 import { TagPicker } from '@/components/ui/TagPicker';
@@ -17,7 +18,7 @@ export function StoryEditor() {
   const ui = useUi();
   const notify = useToast();
 
-  const target = ui.storyEditor!;
+  const target = useSticky(ui.storyEditor)!;
   const existing = target.storyId ? findStory(board, target.storyId) : undefined;
   const isNew = !existing;
 
@@ -76,6 +77,7 @@ export function StoryEditor() {
       open
       size="lg"
       onClose={ui.closeStoryEditor}
+      onSubmit={save}
       title={
         <>
           {isNew ? 'New story' : 'Edit story'}
@@ -102,6 +104,7 @@ export function StoryEditor() {
           <button className="ghost" onClick={ui.closeStoryEditor}>
             Cancel
           </button>
+          <span className="modal-shortcut-hint">Ctrl+Enter to save</span>
         </>
       }
     >

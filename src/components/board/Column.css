@@ -1,4 +1,12 @@
-/* `--accent` is set inline per column from src/config/columns.ts */
+/* `--accent` resolves from the themed --col-* tokens via [data-status] below.
+   It is deliberately NOT set inline from ColumnDef.accent: an inline style wins
+   over any stylesheet rule, which would pin the column to the dark theme's
+   pastel and defeat light mode's deeper accents. */
+
+.column[data-status='new'] { --accent: var(--col-new); }
+.column[data-status='active'] { --accent: var(--col-active); }
+.column[data-status='hold'] { --accent: var(--col-hold); }
+.column[data-status='done'] { --accent: var(--col-done); }
 
 .column {
   background: var(--surface-1);
@@ -123,5 +131,5 @@
 }
 .sortable-drag {
   opacity: 0.95;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-drag);
 }

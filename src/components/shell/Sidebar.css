@@ -1,7 +1,9 @@
 .sidebar {
   width: var(--sidebar-w);
   flex-shrink: 0;
-  background: var(--surface-1);
+  background: var(--chrome-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -116,7 +118,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: #17171a;
+  color: var(--on-pastel);
   font-weight: 700;
   flex-shrink: 0;
   letter-spacing: 0.02em;

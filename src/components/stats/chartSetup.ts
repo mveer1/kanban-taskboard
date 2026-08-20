@@ -12,7 +12,7 @@ import {
 } from 'chart.js';
 
 /**
- * Chart.js registration and shared dark-theme defaults.
+ * Chart.js registration and shared theme defaults.
  * Imported once by StatsPanel so individual charts stay declarative.
  */
 
@@ -48,9 +48,27 @@ export function applyChartTheme() {
   ChartJS.defaults.maintainAspectRatio = false;
 }
 
-/** Grid/axis options shared by the cartesian charts. */
-export const axisOptions = {
-  grid: { color: css('--border', '#2b2b32'), drawTicks: false },
-  border: { display: false },
-  ticks: { padding: 6 },
-};
+/** Grid/axis options shared by the cartesian charts.
+ *
+ * A function, not a const: Chart.js resolves colors in JS, so the values have
+ * to be read at render time. As a module-level const it captured whichever
+ * theme happened to be active at import and then kept dark grid lines forever
+ * after a switch to light. */
+export function getAxisOptions() {
+  return {
+    grid: { color: css('--border', '#2b2b32'), drawTicks: false },
+    border: { display: false },
+    ticks: { padding: 6 },
+  };
+}
+
+/** Column accents for charts, resolved from the active theme rather than from
+ *  ColumnDef.accent — the pastels are unreadable on a light background. */
+export function statusColors(): string[] {
+  return [
+    css('--col-new', '#93c5fd'),
+    css('--col-active', '#fcd34d'),
+    css('--col-hold', '#c4b5fd'),
+    css('--col-done', '#6ee7b7'),
+  ];
+}

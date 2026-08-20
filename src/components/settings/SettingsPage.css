@@ -58,7 +58,14 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   min-width: 100px;
+  color: var(--accent);
 }
+/* Same reason as Column.css — themed tokens, not the inline ColumnDef.accent,
+   so these labels stay readable on a white background. */
+.density-row[data-status='new'] { --accent: var(--col-new); }
+.density-row[data-status='active'] { --accent: var(--col-active); }
+.density-row[data-status='hold'] { --accent: var(--col-hold); }
+.density-row[data-status='done'] { --accent: var(--col-done); }
 .density-hint {
   margin-top: 0;
   flex: 1;

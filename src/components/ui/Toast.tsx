@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import './Toast.css';
 
 /** Transient confirmation messages, bottom-center. */
@@ -29,11 +30,20 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ notify }}>
       {children}
       <div className="toasts">
+        <AnimatePresence>
         {items.map((t) => (
-          <div key={t.id} className={`toast toast-${t.tone}`}>
+          <motion.div
+            key={t.id}
+            className={`toast toast-${t.tone}`}
+            initial={{ opacity: 0, y: 14, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 14, scale: 0.95 }}
+            transition={{ type: 'spring', bounce: 0, duration: 0.35 }}
+          >
             {t.text}
-          </div>
+          </motion.div>
         ))}
+        </AnimatePresence>
       </div>
     </ToastContext.Provider>
   );

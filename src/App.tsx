@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useBoardStore } from './store/BoardContext';
 import { UiProvider, useUi } from './store/UiContext';
 import { useWorkspaces } from './store/WorkspaceContext';
@@ -8,6 +9,7 @@ import { SetupScreen } from './auth/SetupScreen';
 import { backendReady, isFirebaseBackend } from './data/backend';
 import { filterStories } from './store/selectors';
 import { useHotkeys, type Hotkey } from './hooks/useHotkeys';
+import { useAppearance } from './hooks/useAppearance';
 import { Sidebar, type View } from './components/shell/Sidebar';
 import { TopBar } from './components/shell/TopBar';
 import { BoardView } from './components/board/Board';
@@ -33,9 +35,15 @@ const VIEW_META: Record<View, { title: string; subtitle: string }> = {
 function Splash({ message, error }: { message: string; error?: boolean }) {
   return (
     <div className={`splash${error ? ' error' : ''}`}>
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+      >
+        {!error && <div className="splash-mark">TB</div>}
         <h1>{error ? 'Could not load the board' : 'Task Board'}</h1>
         <p>{message}</p>
+        {!error && <div className="splash-dots"><span /><span /><span /></div>}
         {error && !isFirebaseBackend ? (
           <p className="splash-hint">
             Start the API with <code>npm run dev</code> from the <code>taskboard</code> folder.
@@ -46,7 +54,7 @@ function Splash({ message, error }: { message: string; error?: boolean }) {
             Check that Cloud Firestore is enabled and <code>firestore.rules</code> is deployed.
           </p>
         ) : null}
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -61,6 +69,10 @@ function Shell() {
   const settings = store.settings!;
   const visible = filterStories(board, ui.filters);
   const canEdit = store.canEdit;
+
+  // Applied here, not in SettingsPage — Shell is always mounted, so the saved
+  // theme survives a reload without visiting Settings.
+  useAppearance(settings.appearance);
 
   const hotkeys = useMemo<Hotkey[]>(
     () => [
@@ -163,14 +175,17 @@ function Shell() {
         </main>
       </div>
 
-      {/* Dialogs are mounted once, at the top level. */}
-      {ui.detailStoryId ? <StoryDetailModal /> : null}
-      {ui.storyEditor ? <StoryEditor /> : null}
-      {ui.taskEditor ? <TaskEditor /> : null}
-      {ui.projectEditorOpen ? <ProjectEditor /> : null}
-      {ui.tagEditorOpen ? <TagEditor /> : null}
-      {ui.membersOpen ? <MembersDialog /> : null}
-      {ui.accountOpen ? <AccountDialog /> : null}
+      {/* Dialogs are mounted once, at the top level. AnimatePresence keeps each
+         subtree alive long enough for its exit animation to play. */}
+      <AnimatePresence>
+        {ui.detailStoryId ? <StoryDetailModal key="detail" /> : null}
+        {ui.storyEditor ? <StoryEditor key="story" /> : null}
+        {ui.taskEditor ? <TaskEditor key="task" /> : null}
+        {ui.projectEditorOpen ? <ProjectEditor key="projects" /> : null}
+        {ui.tagEditorOpen ? <TagEditor key="tags" /> : null}
+        {ui.membersOpen ? <MembersDialog key="members" /> : null}
+        {ui.accountOpen ? <AccountDialog key="account" /> : null}
+      </AnimatePresence>
     </div>
   );
 }

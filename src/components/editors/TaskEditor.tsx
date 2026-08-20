@@ -4,6 +4,7 @@ import { COLUMNS, PRIORITIES } from '@/config/columns';
 import { findTask, nextId, today, withStatus } from '@/store/selectors';
 import { useBoard, useBoardStore } from '@/store/BoardContext';
 import { useUi } from '@/store/UiContext';
+import { useSticky } from '@/hooks/useSticky';
 import { useToast } from '@/components/ui/Toast';
 import { Field, FieldRow, Modal } from '@/components/ui/Modal';
 import { TagPicker } from '@/components/ui/TagPicker';
@@ -16,7 +17,7 @@ export function TaskEditor() {
   const ui = useUi();
   const notify = useToast();
 
-  const target = ui.taskEditor!;
+  const target = useSticky(ui.taskEditor)!;
   const existing = target.taskId ? findTask(board, target.taskId) : undefined;
   const isNew = !existing;
 
@@ -67,6 +68,7 @@ export function TaskEditor() {
     <Modal
       open
       onClose={ui.closeTaskEditor}
+      onSubmit={save}
       title={
         <>
           {isNew ? 'New task' : 'Edit task'}
@@ -83,6 +85,7 @@ export function TaskEditor() {
           <button className="ghost" onClick={ui.closeTaskEditor}>
             Cancel
           </button>
+          <span className="modal-shortcut-hint">Ctrl+Enter to save</span>
         </>
       }
     >

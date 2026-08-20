@@ -83,7 +83,7 @@ export function Column({
   };
 
   return (
-    <section className="column" style={{ '--accent': def.accent } as React.CSSProperties}>
+    <section className="column" data-status={status}>
       <header className="column-head" onContextMenu={openColumnMenu}>
         <span className="column-title">{def.title}</span>
         <span className="column-count">{stories.length}</span>

@@ -79,17 +79,6 @@ export function SettingsPage({ hotkeys }: { hotkeys: Hotkey[] }) {
   // Re-runs when the backend changes, e.g. after switching workspace.
   useEffect(loadBackups, [source]);
 
-  /* Live-apply appearance so changes are visible immediately. */
-  useEffect(() => {
-    document.documentElement.dataset.theme =
-      settings.appearance.theme === 'system'
-        ? window.matchMedia('(prefers-color-scheme: light)').matches
-          ? 'light'
-          : 'dark'
-        : settings.appearance.theme;
-    document.documentElement.dataset.radius = settings.appearance.radiusScale;
-  }, [settings.appearance.theme, settings.appearance.radiusScale]);
-
   const patch = <K extends keyof Settings>(key: K, value: Partial<Settings[K]>) =>
     updateSettings({ [key]: { ...settings[key], ...value } } as Partial<Settings>);
 
@@ -192,10 +181,8 @@ export function SettingsPage({ hotkeys }: { hotkeys: Hotkey[] }) {
       >
         <div className="density-grid">
           {COLUMNS.map((c) => (
-            <div className="density-row" key={c.id}>
-              <span className="density-name" style={{ color: c.accent }}>
-                {c.title}
-              </span>
+            <div className="density-row" data-status={c.id} key={c.id}>
+              <span className="density-name">{c.title}</span>
               <span className="settings-hint density-hint">{c.hint}</span>
               <div className="density-choice">
                 {(['compact', 'normal'] as Density[]).map((d) => (

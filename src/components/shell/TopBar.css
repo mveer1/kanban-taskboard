@@ -5,7 +5,9 @@
   min-height: var(--topbar-h);
   padding: 10px 20px;
   border-bottom: 1px solid var(--border);
-  background: var(--surface-1);
+  background: var(--chrome-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -56,8 +58,8 @@
 }
 .save-badge.error {
   color: var(--high);
-  border-color: #5c2626;
-  background: #2a1717;
+  border-color: var(--error-border);
+  background: var(--error-bg);
   cursor: help;
 }
 .save-badge.error .save-dot { background: var(--high); }

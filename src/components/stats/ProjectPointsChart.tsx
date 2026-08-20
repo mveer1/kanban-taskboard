@@ -1,7 +1,7 @@
 import { Bar } from 'react-chartjs-2';
 import type { Board, Story } from '@/types/board';
 import { pointsByProject } from '@/store/selectors';
-import { axisOptions } from './chartSetup';
+import { getAxisOptions } from './chartSetup';
 
 /** Stacked open vs done estimate points per project. */
 export function ProjectPointsChart({ board, stories }: { board: Board; stories: Story[] }) {
@@ -37,8 +37,8 @@ export function ProjectPointsChart({ board, stories }: { board: Board; stories: 
       options={{
         plugins: { legend: { position: 'bottom' } },
         scales: {
-          x: { ...axisOptions, stacked: true, grid: { display: false } },
-          y: { ...axisOptions, stacked: true, beginAtZero: true, title: { display: false } },
+          x: { ...getAxisOptions(), stacked: true, grid: { display: false } },
+          y: { ...getAxisOptions(), stacked: true, beginAtZero: true, title: { display: false } },
         },
       }}
     />

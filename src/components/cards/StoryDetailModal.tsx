@@ -13,6 +13,7 @@ import {
 } from '@/store/selectors';
 import { useBoard, useBoardStore } from '@/store/BoardContext';
 import { useUi } from '@/store/UiContext';
+import { useSticky } from '@/hooks/useSticky';
 import { useStoryMenu } from './useItemMenus';
 import { Modal } from '@/components/ui/Modal';
 import { PriorityChip, ProjectTag, TagList } from '@/components/ui/Badges';
@@ -33,7 +34,8 @@ export function StoryDetailModal() {
   const { moveStory, canEdit } = useBoardStore();
   const { requestDeleteStory } = useStoryMenu();
 
-  const story = ui.detailStoryId ? findStory(board, ui.detailStoryId) : undefined;
+  // Sticky so the record survives the exit animation, after the id is cleared.
+  const story = useSticky(ui.detailStoryId ? findStory(board, ui.detailStoryId) : undefined);
   if (!story) return null;
 
   const project = findProject(board, story.project);
@@ -48,6 +50,7 @@ export function StoryDetailModal() {
       open
       size="lg"
       onClose={ui.closeDetail}
+      onSubmit={ui.closeDetail}
       title={
         <>
           <span className="sid">{story.id}</span>

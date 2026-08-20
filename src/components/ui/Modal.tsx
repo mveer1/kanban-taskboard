@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
+import { motion } from 'motion/react';
 import './Modal.css';
 
 /**
@@ -13,6 +14,7 @@ export function Modal({
   size = 'md',
   footer,
   children,
+  onSubmit,
 }: {
   open: boolean;
   onClose: () => void;
@@ -21,6 +23,7 @@ export function Modal({
   size?: 'md' | 'lg' | 'xl';
   footer?: ReactNode;
   children: ReactNode;
+  onSubmit?: () => void;
 }) {
   useEffect(() => {
     if (!open) return;
@@ -29,21 +32,37 @@ export function Modal({
         e.stopPropagation();
         onClose();
       }
+      if (onSubmit && (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        onSubmit();
+      }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+  }, [open, onClose, onSubmit]);
 
   if (!open) return null;
 
   return (
-    <div
+    <motion.div
       className="overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className={`modal modal-${size}`} role="dialog" aria-modal="true">
+      <motion.div
+        className={`modal modal-${size}`}
+        role="dialog"
+        aria-modal="true"
+        initial={{ opacity: 0, scale: 0.97, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.97, y: 8 }}
+        transition={{ type: 'spring', bounce: 0, duration: 0.35 }}
+      >
         <header className="modal-head">
           <div className="modal-titles">
             <h2>{title}</h2>
@@ -57,8 +76,8 @@ export function Modal({
         <div className="modal-body">{children}</div>
 
         {footer ? <footer className="modal-foot">{footer}</footer> : null}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
