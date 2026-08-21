@@ -54,7 +54,7 @@ export function BoardView() {
           </div>
         ) : (
           <div className="board-empty">
-            <p>No stories match the current filters.</p>
+            <p>{ui.filters.search.trim() ? 'No stories found.' : 'No stories match the current filters.'}</p>
             <button className="ghost" onClick={ui.clearFilters}>
               Clear filters
             </button>

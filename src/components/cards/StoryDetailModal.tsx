@@ -49,6 +49,7 @@ export function StoryDetailModal() {
     <Modal
       open
       size="lg"
+      variant="drawer"
       onClose={ui.closeDetail}
       onSubmit={ui.closeDetail}
       title={
@@ -180,7 +181,7 @@ export function StoryDetailModal() {
                 <button
                   key={`${l.direction}-${l.type}-${l.otherId}`}
                   className="detail-link"
-                  onClick={() => ui.focusStory(l.otherId)}
+                  onClick={() => ui.openDetail(l.otherId)}
                 >
                   <span
                     className="detail-link-dot"

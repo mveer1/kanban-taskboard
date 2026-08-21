@@ -23,6 +23,7 @@ import { ProjectEditor } from './components/editors/ProjectEditor';
 import { TagEditor } from './components/editors/TagEditor';
 import { MembersDialog } from './components/workspace/MembersDialog';
 import { AccountDialog } from './components/workspace/AccountDialog';
+import { CommandPalette, type PaletteAction } from './components/ui/CommandPalette';
 import './App.css';
 
 const VIEW_META: Record<View, { title: string; subtitle: string }> = {
@@ -64,6 +65,7 @@ function Shell() {
   const store = useBoardStore();
   const ui = useUi();
   const [view, setView] = useState<View>('board');
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   const board = store.board!;
   const settings = store.settings!;
@@ -91,9 +93,16 @@ function Shell() {
         description: 'Focus search',
         run: () => document.getElementById('board-search')?.focus(),
       },
+      {
+        key: 'k',
+        description: 'Open command palette',
+        ctrlOrMeta: true,
+        run: () => setPaletteOpen(true),
+      },
       { key: 'b', description: 'Go to Board', run: () => setView('board') },
       { key: 'g', description: 'Go to Insights (graph)', run: () => setView('insights') },
       { key: ',', description: 'Go to Settings', run: () => setView('settings') },
+      { key: '?', description: 'Show keyboard shortcuts', run: () => setView('settings') },
       { key: 'p', description: 'Manage projects', run: () => ui.setProjectEditorOpen(true) },
       { key: 'l', description: 'Manage tags (labels)', run: () => ui.setTagEditorOpen(true) },
       {
@@ -122,6 +131,16 @@ function Shell() {
 
   useHotkeys(hotkeys, settings.shortcuts.enabled);
 
+  const paletteActions: PaletteAction[] = [
+    { id: 'search', label: 'Search stories', hint: '/', run: () => document.getElementById('board-search')?.focus() },
+    { id: 'create', label: 'Create story', hint: 'N', run: () => canEdit && ui.openStoryEditor({}) },
+    { id: 'board', label: 'Go to Board', hint: 'B', run: () => setView('board') },
+    { id: 'insights', label: 'Go to Insights', hint: 'G', run: () => setView('insights') },
+    { id: 'projects', label: 'Go to Projects', hint: 'P', run: () => ui.setProjectEditorOpen(true) },
+    { id: 'tags', label: 'Go to Tags', hint: 'L', run: () => ui.setTagEditorOpen(true) },
+    { id: 'shortcuts', label: 'Show keyboard shortcuts', hint: ',', run: () => setView('settings') },
+  ];
+
   return (
     <div className="app">
       <Sidebar
@@ -140,6 +159,7 @@ function Shell() {
           saveState={store.saveState}
           saveErrors={store.saveErrors}
           onOpenSettings={() => setView('settings')}
+          onReload={store.saveNow}
           actions={
             view === 'board' ? (
               <>
@@ -174,6 +194,12 @@ function Shell() {
           {view === 'settings' ? <SettingsPage hotkeys={hotkeys} /> : null}
         </main>
       </div>
+
+      <CommandPalette
+        open={paletteOpen}
+        actions={paletteActions}
+        onClose={() => setPaletteOpen(false)}
+      />
 
       {/* Dialogs are mounted once, at the top level. AnimatePresence keeps each
          subtree alive long enough for its exit animation to play. */}

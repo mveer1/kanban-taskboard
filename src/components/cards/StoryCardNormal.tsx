@@ -3,6 +3,7 @@ import { LINK_BY_TYPE } from '@/config/links';
 import {
   allLinks,
   blockerIds,
+  dueState,
   findProject,
   findStory,
   storyProgress,
@@ -42,7 +43,18 @@ export function StoryCardNormal({ story }: { story: Story }) {
   const tasks = tasksOfStory(board, story.id);
   const blockers = story.status === 'done' ? [] : blockerIds(board, story.id);
   const links = allLinks(board, story);
+  const blockingInbound = links.filter(
+    (link) =>
+      link.direction === 'in' &&
+      LINK_BY_TYPE[link.type]?.blocking &&
+      findStory(board, link.otherId)?.status !== 'done',
+  );
+  const blockingOutbound = links.filter(
+    (link) => link.direction === 'out' && LINK_BY_TYPE[link.type]?.blocking,
+  );
+  const secondaryLinks = links.filter((link) => !LINK_BY_TYPE[link.type]?.blocking);
   const expanded = ui.isExpanded(story.id);
+  const dueStatus = dueState(story.due, story.status);
 
   return (
     <article
@@ -61,11 +73,65 @@ export function StoryCardNormal({ story }: { story: Story }) {
 
         {story.description ? <p className="card-desc">{story.description}</p> : null}
 
-        <div className="row wrap card-meta">
-          <TagList tags={story.tags} max={3} />
-          <EstimateChip estimate={story.estimate} />
-          <DueChip due={story.due} status={story.status} />
-        </div>
+        {dueStatus || blockingInbound.length > 0 || blockingOutbound.length > 0 ? (
+          <div className={`card-attention${dueStatus === 'over' ? ' overdue' : ''}`}>
+            {dueStatus ? (
+              <div className="attention-item">
+                <span className="attention-label">Deadline</span>
+                <DueChip due={story.due} status={story.status} />
+              </div>
+            ) : null}
+
+            {blockingInbound.length > 0 ? (
+              <div className="attention-item attention-links">
+                <span className="attention-label">Blocked by</span>
+                {blockingInbound.map((link) => {
+                  const other = findStory(board, link.otherId);
+                  return (
+                    <button
+                      className="link-target"
+                      key={`blocked-by-${link.otherId}`}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        ui.focusStory(link.otherId);
+                      }}
+                    >
+                      {link.otherId} · {other?.title ?? '(missing story)'}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {blockingOutbound.length > 0 ? (
+              <div className="attention-item attention-links">
+                <span className="attention-label">Blocks</span>
+                {blockingOutbound.map((link) => {
+                  const other = findStory(board, link.otherId);
+                  return (
+                    <button
+                      className="link-target"
+                      key={`blocks-${link.otherId}`}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        ui.focusStory(link.otherId);
+                      }}
+                    >
+                      {link.otherId} · {other?.title ?? '(missing story)'}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+
+        {story.tags?.length || story.estimate ? (
+          <div className="row wrap card-meta">
+            <TagList tags={story.tags} max={3} />
+            <EstimateChip estimate={story.estimate} />
+          </div>
+        ) : null}
 
         {tasks.length > 0 ? (
           <div className="card-progress">
@@ -73,25 +139,21 @@ export function StoryCardNormal({ story }: { story: Story }) {
           </div>
         ) : null}
 
-        {links.length > 0 ? (
+        {secondaryLinks.length > 0 ? (
           <div className="card-links">
-            {links.map((l) => {
-              const other = findStory(board, l.otherId);
-              const gating =
-                l.direction === 'in' &&
-                LINK_BY_TYPE[l.type]?.blocking &&
-                other?.status !== 'done';
+            {secondaryLinks.map((link) => {
+              const other = findStory(board, link.otherId);
               return (
-                <div className="link-row" key={`${l.direction}-${l.type}-${l.otherId}`}>
-                  <span className="link-kind">{l.label}</span>
+                <div className="link-row" key={`${link.direction}-${link.type}-${link.otherId}`}>
+                  <span className="link-kind">{link.label}</span>
                   <button
-                    className={`link-target${other?.status === 'done' ? ' done' : gating ? ' gating' : ''}`}
+                    className={`link-target${other?.status === 'done' ? ' done' : ''}`}
                     onClick={(e) => {
                       e.stopPropagation();
-                      ui.focusStory(l.otherId);
+                      ui.focusStory(link.otherId);
                     }}
                   >
-                    {l.otherId}
+                    {link.otherId}
                     {other ? ` · ${other.title}` : ' (missing)'}
                   </button>
                 </div>
@@ -114,7 +176,9 @@ export function StoryCardNormal({ story }: { story: Story }) {
           disabled={tasks.length === 0}
         >
           <span className={`caret${expanded ? ' open' : ''}`}>▶</span>
-          {tasks.length > 0 ? `${tasks.length} task${tasks.length > 1 ? 's' : ''}` : 'No tasks'}
+          {tasks.length > 0
+            ? `${tasks.length} task${tasks.length > 1 ? 's' : ''} · ${progress.done} complete`
+            : '0 tasks'}
         </button>
 
         <span className="spacer" />

@@ -49,6 +49,7 @@
   color: var(--text-faint);
   overflow: hidden;
   text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 
 .user-divider {
@@ -67,6 +68,7 @@
   font-size: 0.76rem;
   padding: 7px 9px;
   border-radius: var(--r-sm);
+  white-space: normal;
 }
 .user-action:hover:not(:disabled) {
   background: var(--card);
@@ -104,6 +106,15 @@
   border: 1px solid var(--medium);
   background: var(--surface-2);
   color: var(--medium);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 767px) {
+  .user-dropdown {
+    width: min(244px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+  }
 }
 
 .user-callout:hover:not(:disabled) {

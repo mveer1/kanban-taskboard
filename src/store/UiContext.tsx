@@ -34,6 +34,7 @@ export interface TaskEditorTarget {
 
 interface UiContextValue {
   filters: Filters;
+  setFilters(filters: Filters): void;
   setSearch(q: string): void;
   toggleProject(id: string): void;
   togglePriority(p: Priority): void;
@@ -104,6 +105,7 @@ export function UiProvider({ children }: { children: ReactNode }) {
   const value = useMemo<UiContextValue>(
     () => ({
       filters,
+      setFilters,
       setSearch: (search) => setFilters((f) => ({ ...f, search })),
       toggleProject: (id) =>
         setFilters((f) => ({ ...f, projects: toggleIn(f.projects, id) })),

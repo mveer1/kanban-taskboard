@@ -1,6 +1,7 @@
 import type { Story } from '@/types/board';
 import {
   blockerIds,
+  dueState,
   findProject,
   storyProgress,
   tasksOfStory,
@@ -28,6 +29,7 @@ export function StoryCardCompact({ story }: { story: Story }) {
   const progress = storyProgress(board, story.id);
   const blocked = story.status !== 'done' && blockerIds(board, story.id).length > 0;
   const taskCount = tasksOfStory(board, story.id).length;
+  const dueStatus = dueState(story.due, story.status);
 
   return (
     <article
@@ -47,16 +49,22 @@ export function StoryCardCompact({ story }: { story: Story }) {
 
       <div className="compact-meta">
         {taskCount > 0 ? (
+          <span className="compact-tasks">
+            {progress.done}/{progress.total} tasks
+          </span>
+        ) : (
+          <span className="compact-tasks">0 tasks</span>
+        )}
+        {taskCount > 0 ? (
           <ProgressBar
             done={progress.done}
             total={progress.total}
             accent={project?.color}
           />
-        ) : (
-          <span className="sid">no tasks</span>
-        )}
+        ) : null}
         <DueChip due={story.due} status={story.status} />
-        {blocked ? <span className="compact-block" title="Blocked">⚠</span> : null}
+        {blocked ? <span className="compact-block" title="Blocked">Blocked</span> : null}
+        {dueStatus === 'over' ? <span className="compact-overdue">Overdue</span> : null}
       </div>
     </article>
   );

@@ -45,6 +45,7 @@ export function TopBar({
   saveState,
   saveErrors,
   onOpenSettings,
+  onReload,
   actions,
 }: {
   title: string;
@@ -53,12 +54,22 @@ export function TopBar({
   saveState: SaveState;
   saveErrors: string[];
   onOpenSettings: () => void;
+  onReload?: () => Promise<void> | void;
   actions?: React.ReactNode;
 }) {
   const { source, canEdit } = useBoardStore();
 
   return (
     <header className="topbar">
+      <button
+        className="topbar-mobile-brand"
+        title="Reload the board"
+        onClick={() => {
+          void Promise.resolve(onReload?.()).finally(() => window.location.reload());
+        }}
+      >
+        ◧
+      </button>
       <div className="topbar-titles">
         <h1>{title}</h1>
         {subtitle ? <div className="topbar-sub">{subtitle}</div> : null}

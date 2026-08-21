@@ -284,7 +284,14 @@ function matchesSearch(board: Board, story: Story, query: string): boolean {
   const q = query.trim().toLowerCase();
   if (!q) return true;
 
-  const inStory = [story.id, story.title, story.description ?? '', ...(story.tags ?? [])]
+  const project = findProject(board, story.project);
+  const inStory = [
+    story.id,
+    story.title,
+    story.description ?? '',
+    project?.label ?? '',
+    ...(story.tags ?? []),
+  ]
     .join(' ')
     .toLowerCase()
     .includes(q);

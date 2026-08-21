@@ -12,6 +12,7 @@ export function Modal({
   title,
   subtitle,
   size = 'md',
+  variant = 'modal',
   footer,
   children,
   onSubmit,
@@ -21,6 +22,7 @@ export function Modal({
   title: ReactNode;
   subtitle?: ReactNode;
   size?: 'md' | 'lg' | 'xl';
+  variant?: 'modal' | 'drawer';
   footer?: ReactNode;
   children: ReactNode;
   onSubmit?: () => void;
@@ -55,7 +57,7 @@ export function Modal({
       }}
     >
       <motion.div
-        className={`modal modal-${size}`}
+        className={`modal modal-${size}${variant === 'drawer' ? ' modal-drawer' : ''}`}
         role="dialog"
         aria-modal="true"
         initial={{ opacity: 0, scale: 0.97, y: 8 }}

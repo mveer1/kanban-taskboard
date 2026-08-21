@@ -62,8 +62,10 @@ export function WorkspaceSwitcher() {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
+          aria-label={ws.active ? `Workspace: ${ws.active.name}` : 'Choose a workspace'}
         title={ws.active ? `Workspace: ${ws.active.name}` : 'Choose a workspace'}
       >
+        <span className="ws-mobile-label" aria-hidden="true">▦</span>
         <span className="ws-name">{ws.active?.name ?? 'No workspace'}</span>
         {ws.invites.length > 0 ? (
           <span className="ws-badge" title={`${ws.invites.length} pending invitation(s)`}>

@@ -27,7 +27,7 @@ export function useSortableColumn(
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || !enabled) return;
+    if (!node || !enabled || window.matchMedia('(max-width: 767px)').matches) return;
 
     const instance = Sortable.create(node, {
       group: 'stories',

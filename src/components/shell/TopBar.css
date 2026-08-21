@@ -13,6 +13,10 @@
   z-index: 50;
 }
 
+.topbar-mobile-brand {
+  display: none;
+}
+
 .topbar-titles { min-width: 0; }
 .topbar-sub {
   font-size: 0.68rem;
@@ -80,6 +84,91 @@
   border-radius: var(--r-pill);
   border: 1px dashed var(--border-strong);
   white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .topbar {
+    min-height: 52px;
+    padding: 8px 16px;
+    gap: 9px;
+  }
+
+  .topbar-mobile-brand {
+    display: grid;
+    place-items: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--col-new);
+    font-size: 1.05rem;
+  }
+
+  .topbar-titles h1 {
+    font-size: 1.05rem;
+  }
+
+  .topbar-sub {
+    display: none;
+  }
+
+  .topbar-right {
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+
+  .topbar-right > .ghost,
+  .topbar-right > .topbar-readonly {
+    display: none;
+  }
+
+  .topbar-right > .ws-switcher {
+    display: block;
+  }
+
+  .ws-trigger {
+    width: 34px;
+    min-width: 34px;
+    height: 40px;
+    justify-content: center;
+    padding: 4px;
+  }
+
+  .ws-trigger .ws-name,
+  .ws-trigger .caret {
+    display: none;
+  }
+
+  .topbar-right > .primary {
+    min-height: 40px;
+    padding: 7px 10px;
+  }
+
+  .save-badge {
+    width: 10px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 0;
+  }
+
+  .save-badge .save-dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .user-trigger {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 3px;
+  }
+
+  .user-trigger .caret {
+    display: none;
+  }
 }
 
 @keyframes pulse {

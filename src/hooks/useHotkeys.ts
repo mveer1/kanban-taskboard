@@ -5,6 +5,7 @@ export interface Hotkey {
   key: string;
   description: string;
   run: () => void;
+  ctrlOrMeta?: boolean;
 }
 
 /** True when focus is in a text field — typing should not trigger shortcuts. */
@@ -24,11 +25,14 @@ export function useHotkeys(hotkeys: Hotkey[], enabled = true) {
     if (!enabled) return;
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (inTextInput(e.target) && e.key !== 'Escape') return;
-
-      const match = hotkeys.find((h) => h.key.toLowerCase() === e.key.toLowerCase());
+      if (e.altKey) return;
+      const match = hotkeys.find(
+        (h) =>
+          h.key.toLowerCase() === e.key.toLowerCase() &&
+          Boolean(h.ctrlOrMeta) === (e.metaKey || e.ctrlKey),
+      );
       if (!match) return;
+      if (inTextInput(e.target) && e.key !== 'Escape' && !match.ctrlOrMeta) return;
 
       e.preventDefault();
       match.run();
